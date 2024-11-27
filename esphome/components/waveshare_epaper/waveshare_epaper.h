@@ -693,11 +693,11 @@ class WaveshareEPaper7P5InHDB : public WaveshareEPaper {
     this->command(0x10);
     this->data(0x01);
   }
+  std::vector<Color> get_supported_colors() override { return {display::COLOR_ON, Color(255, 0, 0, 0)}; }
 
  protected:
-  int get_width_internal() override;
-
-  int get_height_internal() override;
+  int get_width_internal() override { return 880; }
+  int get_height_internal() override { return 500; }
 };
 
 class WaveshareEPaper2P13InDKE : public WaveshareEPaper {

@@ -2790,28 +2790,24 @@ void HOT WaveshareEPaper7P5InHDB::display() {
   this->data(0xAf);
   this->data(0x02);
 
-  // BLACK
+  uint32_t buf_len = this->get_buffer_length_();
+  // COMMAND DATA START TRANSMISSION BLACK
   this->command(0x24);
-  this->start_data_();
-  this->write_array(this->buffer_, this->get_buffer_length_());
-  this->end_data_();
+  for (uint32_t i = 0; i < buf_len / 2; i++) {
+    this->data(this->buffer_[i]);
+  }
 
-  // RED
+  // COMMAND DATA START TRANSMISSION RED
   this->command(0x26);
-  this->start_data_();
-  for (size_t i = 0; i < this->get_buffer_length_(); i++)
-    this->write_byte(0x00);
-  this->end_data_();
+  for (uint32_t i = buf_len / 2; i < buf_len; i++) {
+    this->data(~this->buffer_[i]);
+  }
 
   this->command(0x22);
   this->data(0xC7);
   this->command(0x20);
   delay(100);  // NOLINT
 }
-
-int WaveshareEPaper7P5InHDB::get_width_internal() { return 880; }
-
-int WaveshareEPaper7P5InHDB::get_height_internal() { return 528; }
 
 void WaveshareEPaper7P5InHDB::dump_config() {
   LOG_DISPLAY("", "Waveshare E-Paper", this);
